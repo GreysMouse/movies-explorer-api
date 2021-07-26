@@ -1,0 +1,14 @@
+{
+  "extends": "airbnb-base",
+  "rules": {
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }],
+    "no-console": "off",
+    "object-curly-newline": "off",
+    "indent": ["error", 2, { "MemberExpression": "off"}],
+    "curly": "off",
+    "eqeqeq": "off",
+    "no-useless-escape": "off",
+    "max-classes-per-file": "off",
+    "comma-dangle": ["error", "never"]
+  }
+}
