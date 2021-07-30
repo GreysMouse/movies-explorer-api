@@ -1,26 +1,67 @@
 const mongoose = require('mongoose');
-const validator = require('validator');
+
+const { URL_REG_EXP } = require('../constants/regExps');
 
 const movieSchema = new mongoose.Schema({
-  email: {
+  country: {
     type: String,
+    required: true,
+  },
+  director: {
+    type: String,
+    required: true,
+  },
+  duration: {
+    type: Number,
+    required: true,
+  },
+  year: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  image: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (link) => URL_REG_EXP.test(link),
+    },
+  },
+  trailer: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (link) => URL_REG_EXP.test(link),
+    },
+  },
+  thumbnail: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (link) => URL_REG_EXP.test(link),
+    },
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+    required: true,
+  },
+  movieId: {
+    type: Number,
     required: true,
     unique: true,
-    validate: {
-      validator: (v) => validator.isEmail(v)
-    }
   },
-  password: {
+  nameRU: {
     type: String,
     required: true,
-    select: false
   },
-  name: {
+  nameEN: {
     type: String,
     required: true,
-    minlength: 2,
-    maxlength: 30
-  }
+  },
 }, { versionKey: false });
 
 module.exports = mongoose.model('movie', movieSchema);
