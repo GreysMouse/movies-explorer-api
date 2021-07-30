@@ -12,7 +12,7 @@ const { NotFoundError } = require('../errors/notFoundError');
 const { ForbiddenError } = require('../errors/forbiddenError');
 const { ConflictError } = require('../errors/conflictError');
 
-const getMovies = (req, res, next) => Movie.find({ owner: req.user._id }).select('-_id')
+const getMovies = (req, res, next) => Movie.find({ owner: req.user._id })
   .then((list) => res.send(list))
   .catch(next);
 
@@ -22,20 +22,7 @@ const createMovie = (req, res, next) => {
       if (movie) throw new ConflictError(UNIQUE_MOVIE_REGISTER_ERR_MSG);
       return Movie.create({ ...req.body, owner: req.user._id });
     })
-    .then((movie) => res.send({
-      country: movie.country,
-      director: movie.director,
-      duration: movie.duration,
-      year: movie.year,
-      description: movie.description,
-      image: movie.image,
-      trailer: movie.trailer,
-      thumbnail: movie.thumbnail,
-      owner: movie.owner,
-      movieId: movie.movieId,
-      nameRU: movie.nameRU,
-      nameEN: movie.nameEN,
-    }))
+    .then((movie) => res.send(movie))
     .catch((err) => {
       if (err.name === 'ValidationError') next(new InvalidRequestError(INVALID_REQUEST_ERR_MSG));
       else next(err);

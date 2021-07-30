@@ -17,7 +17,7 @@ const register = (req, res, next) => {
       return bcrypt.hash(password, JWT_SALT_ROUNDS);
     })
     .then((hash) => User.create({ email, password: hash, name }))
-    .then(() => res.send({ email, name }))
+    .then((user) => res.send({ _id: user._id, email, name }))
     .catch((err) => {
       if (err.name === 'ValidationError') return next(new InvalidRequestError(INVALID_REQUEST_ERR_MSG));
       return next(err);
