@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../errors/unauthorizedError');
 const login = (req, res, next) => {
   const { email, password } = req.body;
 
-  User.findOne({ email })
+  User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) throw new UnauthorizedError(INVALID_USER_CREDENTIALS_ERR_MSG);
 

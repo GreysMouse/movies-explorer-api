@@ -10,7 +10,7 @@ const { NotFoundError } = require('../errors/notFoundError');
 const { ConflictError } = require('../errors/conflictError');
 const { InvalidRequestError } = require('../errors/invalidRequestError');
 
-const getUser = (req, res, next) => User.findById(req.user._id).select('-password')
+const getUser = (req, res, next) => User.findById(req.user._id)
   .orFail(() => new NotFoundError(USER_NOT_FOUND_ERR_MSG))
   .then((user) => res.send(user))
   .catch(next);
@@ -24,7 +24,10 @@ const updateUser = (req, res, next) => {
       if (user && req.user._id != user._id) {
         throw new ConflictError(UNIQUE_USER_REGISTER_ERR_MSG);
       }
-      return User.findByIdAndUpdate(req.user._id, { email, name }, { new: true, runValidators: true }).select('-password');
+      return User.findByIdAndUpdate(req.user._id, { email, name }, {
+        new: true,
+        runValidators: true,
+      });
     })
     .then((user) => {
       if (!user) throw new NotFoundError(USER_NOT_FOUND_ERR_MSG);

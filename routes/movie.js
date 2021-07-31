@@ -3,6 +3,7 @@ const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
 
 const { URL_REG_EXP } = require('../constants/regExps');
+
 const { getMovies, createMovie, deleteMovie } = require('../controllers/movie');
 
 router.get('/', getMovies);
