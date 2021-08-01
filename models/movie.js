@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
-
-const { URL_REG_EXP } = require('../constants/regExps');
+const validator = require('validator');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -27,21 +26,21 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (link) => URL_REG_EXP.test(link),
+      validator: (link) => validator.isURL(link),
     },
   },
   trailer: {
     type: String,
     required: true,
     validate: {
-      validator: (link) => URL_REG_EXP.test(link),
+      validator: (link) => validator.isURL(link),
     },
   },
   thumbnail: {
     type: String,
     required: true,
     validate: {
-      validator: (link) => URL_REG_EXP.test(link),
+      validator: (link) => validator.isURL(link),
     },
   },
   owner: {

@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const Movie = require('../models/movie');
 
 const {
@@ -30,14 +32,17 @@ const createMovie = (req, res, next) => {
 };
 
 const deleteMovie = (req, res, next) => {
-  Movie.findOne({ movieId: req.params.movieId })
+  if (!mongoose.Types.ObjectId.isValid(req.params.movieId)) {
+    throw new InvalidRequestError(INVALID_REQUEST_ERR_MSG);
+  }
+
+  Movie.findOne({ _id: req.params.movieId })
     .orFail(() => new NotFoundError(MOVIE_NOT_FOUND_ERR_MSG))
     .then((movie) => {
-      // eslint-disable-next-line eqeqeq
-      if (movie.owner == req.user._id) return movie;
+      if (movie.owner.toString() === req.user._id) return movie;
       throw new ForbiddenError(NO_ACCESS_ERR_MSG);
     })
-    .then((movie) => Movie.findOneAndRemove({ movieId: movie.movieId }))
+    .then((movie) => Movie.findOneAndRemove({ _id: movie._id }))
     .then((movie) => res.send(movie))
     .catch(next);
 };

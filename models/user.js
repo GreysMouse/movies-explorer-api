@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
+const validator = require('validator');
 
-const { EMAIL_REG_EXP } = require('../constants/regExps');
 const { USER_NAME_MIN_LENGTH, USER_NAME_MAX_LENGTH } = require('../constants/constraints');
 
 const userSchema = new mongoose.Schema({
@@ -9,7 +9,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
     validate: {
-      validator: (email) => EMAIL_REG_EXP.test(email),
+      validator: (email) => validator.isEmail(email),
     },
   },
   password: {

@@ -1,8 +1,7 @@
 const router = require('express').Router();
+const validator = require('validator');
 
 const { celebrate, Joi } = require('celebrate');
-
-const { URL_REG_EXP } = require('../constants/regExps');
 
 const { getMovies, createMovie, deleteMovie } = require('../controllers/movie');
 
@@ -15,9 +14,18 @@ router.post('/', celebrate({
     duration: Joi.number().integer().positive().required(),
     year: Joi.string().required(),
     description: Joi.string().required(),
-    image: Joi.string().required().pattern(URL_REG_EXP),
-    trailer: Joi.string().required().pattern(URL_REG_EXP),
-    thumbnail: Joi.string().required().pattern(URL_REG_EXP),
+    image: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) return value;
+      return helpers.message('Incorrect URL');
+    }),
+    trailer: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) return value;
+      return helpers.message('Incorrect URL');
+    }),
+    thumbnail: Joi.string().required().custom((value, helpers) => {
+      if (validator.isURL(value)) return value;
+      return helpers.message('Incorrect URL');
+    }),
     movieId: Joi.number().integer().positive().required(),
     nameRU: Joi.string().required(),
     nameEN: Joi.string().required(),
@@ -26,7 +34,7 @@ router.post('/', celebrate({
 
 router.delete('/:movieId', celebrate({
   params: Joi.object().keys({
-    movieId: Joi.number().integer().positive().required(),
+    movieId: Joi.required(),
   }),
 }), deleteMovie);
 
